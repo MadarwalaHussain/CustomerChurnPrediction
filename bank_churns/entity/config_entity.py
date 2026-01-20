@@ -33,7 +33,6 @@ class DataIngestionConfig:
     training_pipeline_config: TrainingPipelineConfig
 
     def __post_init__(self):
-        import pdb;pdb.set_trace()
         self.source_data_path= training_pipeline.DATA_INGESTION_SOURCE_DATA_PATH
         # self.collection_name=training_pipeline.DATA_INGESTION_COLLECTION_NAME
 
@@ -60,8 +59,7 @@ class DataIngestionConfig:
         # Split configuration
         self.train_test_split_ratio = training_pipeline.DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO
         self.random_state = training_pipeline.DATA_INGESTION_RANDOM_STATE
-        import pdb
-        pdb.set_trace()
+
         # Create directory
         os.makedirs(self.data_ingestion_dir, exist_ok=True)
 
@@ -80,11 +78,11 @@ class DataValidationConfig:
             training_pipeline.DATA_VALIDATION_DIR_NAME
         )
         self.validation_report_file_path=os.path.join(
-            self.training_pipeline_config.data_validation_dir,
+            self.data_validation_dir,
             training_pipeline.DATA_VALIDATION_REPORT_FILE_NAME
         )
         self.drift_report_file_path = os.path.join(
-            self.training_pipeline_config.data_validation_dir,
+            self.data_validation_dir,
             training_pipeline.DATA_VALIDATION_DRFT_REPORT_FILE_NAME
         )
 

@@ -6,9 +6,10 @@ from bank_churns.utils.main_utils.utils import save_object, load_object
 from bank_churns.utils.ml_utils.model.estimator import BankChurnModel
 from bank_churns.utils.ml_utils.metric.classification_metric import get_classification_score, log_detailed_classification_report, calculate_business_metrics
 
-from bank_churns.entity.config_entity import DataIngestionConfig,TrainingPipelineConfig
-from bank_churns.entity.artifact_entity import DataIngestionArtifact
+from bank_churns.entity.config_entity import DataIngestionConfig,TrainingPipelineConfig,DataValidationConfig
+from bank_churns.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact
 from bank_churns.components.data_ingestion import DataIngestion
+from bank_churns.components.data_validation import DataValidation
 from bank_churns.logging.logger import logging
 from bank_churns.exception.exception import BankChurnException
 import sys
@@ -42,6 +43,21 @@ def main():
         logging.info(f"   Train file: {data_ingestion_artifact.trained_file_path}")
         logging.info(f"   Test file: {data_ingestion_artifact.test_file_path}")
 
+        # ==================== DATA VALIDATION ====================
+        logging.info("\n" + "=" * 70)
+        logging.info("PHASE 2: DATA VALIDATION")
+        logging.info("=" * 70)
+        data_validation_config=DataValidationConfig(training_pipeline_config)
+        data_validation= DataValidation(data_ingestion_artifact=data_ingestion_artifact, 
+                                        data_validation_config=data_validation_config)
+        data_validation_artifact = data_validation.initiate_data_validation()
+
+        if data_validation_artifact.validation_status:
+            logging.info('Data Validation passed')
+
+        else:
+            logging.warning(" Data Validation completed with warnings")
+            logging.warning(f"   Message: {data_validation_artifact.message}")
     except Exception as e:
         logging.error("\n" + "=" * 70)
         logging.error("PIPELINE EXECUTION FAILED")

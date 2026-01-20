@@ -74,7 +74,6 @@ class DataIngestion:
             - Checks for completely empty DataFrame
         """
         try:
-            import pdb;pdb.set_trace()
             source_path = self.data_ingestion_config.source_data_path
 
             # validate file exists
