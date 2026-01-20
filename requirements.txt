@@ -1,0 +1,9 @@
+pandas 
+numpy
+seaborn
+plotly
+matplotlib
+scikit-learn
+fastapi
+dill
+PyYaml

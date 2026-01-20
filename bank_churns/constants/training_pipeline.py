@@ -7,16 +7,17 @@ import os
 from datetime import datetime
 
 # Pipeline configuration
-PIPLINE_NAME = 'bankchurns'
+PIPELINE_NAME = 'bankchurns'
 ARTIFACT_DIR = 'artifacts'
 TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 # DATA INGESTION
 DATA_INGESTION_DIR_NAME = 'data_ingestion'
-DATA_INGESTION_COLLECTION_NAME ='bank_churns'
-DATA_INGESTION_DATABASE_NAME = 'bank_churns'
+# DATA_INGESTION_COLLECTION_NAME ='bank_churns'
+DATA_INGESTION_SOURCE_DATA_PATH = "churn.csv"
+# DATA_INGESTION_DATABASE_NAME = 'bank_churns'
 DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO = 0.2
-DATA_INGESION_RANDOM_STATE  = 42
+DATA_INGESTION_RANDOM_STATE  = 42
 
 # File names
 DATA_INGESTION_RAW_DATA_FILE_NAME='raw_data.csv'

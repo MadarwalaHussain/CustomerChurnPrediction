@@ -10,7 +10,7 @@ LOG_DIR= 'logs'
 os.makedirs(LOG_DIR, exist_ok=True)
 
 # Generate log file name with timestamp
-LOG_FILE_NAME = f'bankchurn_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log'
+LOG_FILE_NAME = f"bankchurn_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 LOG_FILE_PATH = os.path.join(LOG_DIR, LOG_FILE_NAME)
 
 # Configure logging format
