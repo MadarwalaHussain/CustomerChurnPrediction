@@ -156,6 +156,7 @@ def log_detailed_classification_report(y_true: np.ndarray, y_pred: np.ndarray) -
         logging.info("\n" + report)
         logging.info("=" * 60)
 
+        return report
     except Exception as e:
         logging.warning(f"Could not generate detailed report: {str(e)}")
 

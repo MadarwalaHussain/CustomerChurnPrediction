@@ -8,3 +8,7 @@ fastapi
 dill
 PyYaml
 xgboost
+mlflow
+dagshub
+dvc-s3
+boto3

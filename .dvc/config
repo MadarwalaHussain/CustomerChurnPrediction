@@ -1,0 +1,4 @@
+['remote "origin"']
+    url = s3://dvc
+    endpointurl = https://dagshub.com/MadarwalaHussain/CustomerChurnPrediction.s3
+    ssl_verify = false
