@@ -6,11 +6,12 @@ from bank_churns.utils.main_utils.utils import save_object, load_object
 from bank_churns.utils.ml_utils.model.estimator import BankChurnModel
 from bank_churns.utils.ml_utils.metric.classification_metric import get_classification_score, log_detailed_classification_report, calculate_business_metrics
 
-from bank_churns.entity.config_entity import DataIngestionConfig,TrainingPipelineConfig,DataValidationConfig, DataTransformationConfig
+from bank_churns.entity.config_entity import DataIngestionConfig,TrainingPipelineConfig,DataValidationConfig, DataTransformationConfig, ModelTrainerConfig
 from bank_churns.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact
 from bank_churns.components.data_ingestion import DataIngestion
 from bank_churns.components.data_validation import DataValidation
 from bank_churns.components.data_transformation import DataTransformation
+from bank_churns.components.model_trainer import ModelTrainer
 from bank_churns.logging.logger import logging
 from bank_churns.exception.exception import BankChurnException
 import sys
@@ -79,6 +80,20 @@ def main():
         logging.info(f"   Transformed test: {data_transformation_artifact.transformed_test_file_path}")
         logging.info(f"   Preprocessor: {data_transformation_artifact.preprocessor_object_file_path}")
 
+        # ==================== MODEL TRAINING ====================
+        logging.info("\n" + "=" * 70)
+        logging.info("PHASE 4: MODEL TRAINING")
+        logging.info("=" * 70)
+
+        model_trainer_config = ModelTrainerConfig(training_pipeline_config)
+        model_trainer = ModelTrainer(model_trainer_config=model_trainer_config, data_transformation_artifact=data_transformation_artifact)
+        model_trainer_artifact  = model_trainer.initiate_model()
+
+        logging.info(" Model Training completed successfully")
+        logging.info(f"   Model: {model_trainer_artifact.model_name}")
+        logging.info(f"   Test F1: {model_trainer_artifact.test_metric_artifact.f1_score:.4f}")
+        logging.info(f"   Model saved to: {model_trainer_artifact.trained_model_file_path}")
+        
     except Exception as e:
         logging.error("\n" + "=" * 70)
         logging.error("PIPELINE EXECUTION FAILED")

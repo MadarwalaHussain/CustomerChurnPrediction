@@ -7,3 +7,4 @@ scikit-learn
 fastapi
 dill
 PyYaml
+xgboost

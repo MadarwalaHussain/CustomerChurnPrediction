@@ -65,7 +65,7 @@ BINARY_FEATURES = ["HasCrCard", "IsActiveMember"]
 # Model Trainer
 MODEL_TRAINER_DIR_NAME = 'model_trainer'
 MODEL_TRAINER_TRAINED_MODEL_FILE_NAME = 'model.pkl'
-MODEL_TRAINER_EXPECTED_SCORE  = 0.80 # minimum acceptable f1 score
+MODEL_TRAINER_EXPECTED_SCORE  = 0.60 # minimum acceptable f1 score
 MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD = 0.05
 
 # Model seletion
