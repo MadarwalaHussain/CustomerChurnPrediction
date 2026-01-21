@@ -6,10 +6,11 @@ from bank_churns.utils.main_utils.utils import save_object, load_object
 from bank_churns.utils.ml_utils.model.estimator import BankChurnModel
 from bank_churns.utils.ml_utils.metric.classification_metric import get_classification_score, log_detailed_classification_report, calculate_business_metrics
 
-from bank_churns.entity.config_entity import DataIngestionConfig,TrainingPipelineConfig,DataValidationConfig
+from bank_churns.entity.config_entity import DataIngestionConfig,TrainingPipelineConfig,DataValidationConfig, DataTransformationConfig
 from bank_churns.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact
 from bank_churns.components.data_ingestion import DataIngestion
 from bank_churns.components.data_validation import DataValidation
+from bank_churns.components.data_transformation import DataTransformation
 from bank_churns.logging.logger import logging
 from bank_churns.exception.exception import BankChurnException
 import sys
@@ -58,6 +59,26 @@ def main():
         else:
             logging.warning(" Data Validation completed with warnings")
             logging.warning(f"   Message: {data_validation_artifact.message}")
+
+        # ==================== DATA TRANSFORMATION ====================
+        logging.info("\n" + "=" * 70)
+        logging.info("PHASE 3: DATA TRANSFORMATION")
+        logging.info("=" * 70)
+        data_transformation_config=DataTransformationConfig(
+            training_pipeline_config=training_pipeline_config
+        )
+
+        data_transformation = DataTransformation(
+            data_validation_artifact=data_validation_artifact,
+            data_transformation_config=data_transformation_config
+        )
+
+        data_transformation_artifact= data_transformation.initiate_data_transformation()
+        logging.info(" Data Transformation completed successfully")
+        logging.info(f"   Transformed train: {data_transformation_artifact.transformed_train_file_path}")
+        logging.info(f"   Transformed test: {data_transformation_artifact.transformed_test_file_path}")
+        logging.info(f"   Preprocessor: {data_transformation_artifact.preprocessor_object_file_path}")
+
     except Exception as e:
         logging.error("\n" + "=" * 70)
         logging.error("PIPELINE EXECUTION FAILED")

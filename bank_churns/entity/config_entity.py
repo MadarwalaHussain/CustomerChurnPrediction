@@ -5,8 +5,9 @@ Uses dataclasses for clean, type-safe configuration management.
 
 import os
 from dataclasses import dataclass
-from datetime import datetime   
+from datetime import datetime
 from bank_churns.constants import training_pipeline
+
 
 @dataclass
 class TrainingPipelineConfig:
@@ -14,16 +15,16 @@ class TrainingPipelineConfig:
     Configuration for the overall training pipeline.
     Creates timestamped artifact directory for pipeline runs.
     """
-    pipeline_name:str=training_pipeline.PIPELINE_NAME
-    artifact_dir:str=training_pipeline.ARTIFACT_DIR
-    timestamp:str=training_pipeline.TIMESTAMP
+    pipeline_name: str = training_pipeline.PIPELINE_NAME
+    artifact_dir: str = training_pipeline.ARTIFACT_DIR
+    timestamp: str = training_pipeline.TIMESTAMP
 
     def __post_init__(self):
         """Create artifact directory structure after initialization."""
         self.artifact_path = os.path.join(self.artifact_dir, self.timestamp)
         os.makedirs(self.artifact_path, exist_ok=True)
 
-    
+
 @dataclass
 class DataIngestionConfig:
     """
@@ -33,25 +34,25 @@ class DataIngestionConfig:
     training_pipeline_config: TrainingPipelineConfig
 
     def __post_init__(self):
-        self.source_data_path= training_pipeline.DATA_INGESTION_SOURCE_DATA_PATH
+        self.source_data_path = training_pipeline.DATA_INGESTION_SOURCE_DATA_PATH
         # self.collection_name=training_pipeline.DATA_INGESTION_COLLECTION_NAME
 
         # Directory setup
         self.data_ingestion_dir = os.path.join(
             self.training_pipeline_config.artifact_path,
             training_pipeline.DATA_INGESTION_DIR_NAME
-            )
-        
+        )
+
         # File paths
-        self.raw_data_file_path=os.path.join(
+        self.raw_data_file_path = os.path.join(
             self.data_ingestion_dir,
             training_pipeline.DATA_INGESTION_RAW_DATA_FILE_NAME
         )
-        self.train_file_path=os.path.join(
+        self.train_file_path = os.path.join(
             self.data_ingestion_dir,
             training_pipeline.DATA_INGESTION_TRAIN_FILE_NAME
         )
-        self.test_file_path=os.path.join(
+        self.test_file_path = os.path.join(
             self.data_ingestion_dir,
             training_pipeline.DATA_INGESTION_TEST_FILE_NAME
         )
@@ -63,6 +64,7 @@ class DataIngestionConfig:
         # Create directory
         os.makedirs(self.data_ingestion_dir, exist_ok=True)
 
+
 @dataclass
 class DataValidationConfig:
     """
@@ -73,11 +75,11 @@ class DataValidationConfig:
 
     def __post_init__(self):
         """Set up data validation paths."""
-        self.data_validation_dir=os.path.join(
+        self.data_validation_dir = os.path.join(
             self.training_pipeline_config.artifact_path,
             training_pipeline.DATA_VALIDATION_DIR_NAME
         )
-        self.validation_report_file_path=os.path.join(
+        self.validation_report_file_path = os.path.join(
             self.data_validation_dir,
             training_pipeline.DATA_VALIDATION_REPORT_FILE_NAME
         )
@@ -92,6 +94,7 @@ class DataValidationConfig:
         self.target_column = training_pipeline.TARGET_COLUMN
 
         os.makedirs(self.data_validation_dir, exist_ok=True)
+
 
 @dataclass
 class DataTransformationConfig:
@@ -133,42 +136,44 @@ class DataTransformationConfig:
         self.categorical_features = training_pipeline.CATEGORICAL_FEATURES
         self.binary_features = training_pipeline.BINARY_FEATURES
         self.target_column = training_pipeline.TARGET_COLUMN
+        self.columns_to_drop = training_pipeline.COLUMNS_TO_DROP
 
         # Create directories
         os.makedirs(self.data_transformation_dir, exist_ok=True)
         os.makedirs(self.transformed_data_dir, exist_ok=True)
 
+
 @dataclass
 class ModelTrainerConfig:
 
-   """
-    Configuration for model training component.
-    Handles model training parameters and quality thresholds.
     """
-   training_pipeline_config: TrainingPipelineConfig
+     Configuration for model training component.
+     Handles model training parameters and quality thresholds.
+     """
+    training_pipeline_config: TrainingPipelineConfig
 
-   def __post_init__(self):
-       """Set up model training paths and parameters."""
-       self.model_trainer_dir = os.path.join(
-           self.training_pipeline_config.artifact_path,
-           training_pipeline.MODEL_TRAINER_DIR_NAME
-       )
+    def __post_init__(self):
+        """Set up model training paths and parameters."""
+        self.model_trainer_dir = os.path.join(
+            self.training_pipeline_config.artifact_path,
+            training_pipeline.MODEL_TRAINER_DIR_NAME
+        )
 
-       self.trained_model_file_path = os.path.join(
-           self.model_trainer_dir,
-           training_pipeline.MODEL_TRAINER_TRAINED_MODEL_FILE_NAME
-       )
+        self.trained_model_file_path = os.path.join(
+            self.model_trainer_dir,
+            training_pipeline.MODEL_TRAINER_TRAINED_MODEL_FILE_NAME
+        )
 
-       # Model quality thresholds
-       self.expected_score = training_pipeline.MODEL_TRAINER_EXPECTED_SCORE
-       self.overfitting_underfitting_threshold = (
-           training_pipeline.MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD
-       )
+        # Model quality thresholds
+        self.expected_score = training_pipeline.MODEL_TRAINER_EXPECTED_SCORE
+        self.overfitting_underfitting_threshold = (
+            training_pipeline.MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD
+        )
 
-       # Class imbalance handling
-       self.use_class_weight = training_pipeline.USE_CLASS_WEIGHT
+        # Class imbalance handling
+        self.use_class_weight = training_pipeline.USE_CLASS_WEIGHT
 
-       os.makedirs(self.model_trainer_dir, exist_ok=True)
+        os.makedirs(self.model_trainer_dir, exist_ok=True)
 
 
 @dataclass
