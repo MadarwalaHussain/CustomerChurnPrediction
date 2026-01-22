@@ -1,0 +1,52 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # Main ML Pipeline
+  ml-pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bank-churn-pipeline
+    volumes:
+      # Mount data directory
+      - ./data:/app/data
+      # Mount artifacts (persists between runs)
+      - ./artifacts:/app/artifacts
+      # Mount final models
+      - ./final_models:/app/final_models
+      # Mount logs
+      - ./logs:/app/logs
+    environment:
+      # MLflow configuration
+      - MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}
+      - MLFLOW_TRACKING_USERNAME=${MLFLOW_TRACKING_USERNAME}
+      - MLFLOW_TRACKING_PASSWORD=${MLFLOW_TRACKING_PASSWORD}
+      - DAGSHUB_USERNAME=${DAGSHUB_USERNAME}
+      # Pipeline configuration
+      - PIPELINE_NAME=bank-churn-prediction
+      - AUTO_APPLY_SSL_FIX=true
+    command: python main.py
+    networks:
+      - ml-network
+
+  # Optional: MLflow UI (for local development)
+  mlflow-ui:
+    image: python:3.11-slim
+    container_name: mlflow-ui
+    working_dir: /app
+    volumes:
+      - ./mlruns:/app/mlruns
+    ports:
+      - "5000:5000"
+    command: >
+      bash -c "pip install mlflow &&
+               mlflow ui --host 0.0.0.0 --port 5000"
+    networks:
+      - ml-network
+    profiles:
+      - dev  # Only runs with: docker-compose --profile dev up
+
+networks:
+  ml-network:
+    driver: bridge

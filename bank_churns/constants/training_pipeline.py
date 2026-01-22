@@ -75,6 +75,7 @@ MODEL_CONFIG_FILE_PATH = os.path.join('config', 'model.yaml')
 MODEL_EVALUATION_DIR_NAME = 'model_evaluation'
 MODEL_EVALUATION_REPORT_FILE_NAME = 'evaluation_report.yaml'
 MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE = 0.02 # Model improvement threshold
+MODEL_EVALUATION_TEST_FILE_NAME = "data/churn_test.csv"
 
 # Model Pusher 
 MODEL_PUSHER_DIR_NAME = 'model_pusher'

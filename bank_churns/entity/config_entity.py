@@ -193,8 +193,12 @@ class ModelEvaluationConfig:
 
         self.evaluation_report_file_path = os.path.join(
             self.model_evaluation_dir,
-            training_pipeline.MODEL_EVALUATION_REPORT_FILE_NAME
+            training_pipeline.MODEL_EVALUATION_TEST_FILE_NAME
         )
+        self.new_test_file_path = (
+            training_pipeline.MODEL_EVALUATION_TEST_FILE_NAME
+            )
+        
 
         self.changed_threshold_score = (
             training_pipeline.MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE

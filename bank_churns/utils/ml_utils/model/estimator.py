@@ -95,7 +95,6 @@ class BankChurnModel:
                     'HasCrCard', 'IsActiveMember', 'EstimatedSalary'
                 ]
                 X = pd.DataFrame(X, columns=columns)
-
             # Step 2: Apply feature engineering
             X_engineered = self.feature_engineering(X.copy())
 

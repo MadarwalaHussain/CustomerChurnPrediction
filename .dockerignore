@@ -1,0 +1,55 @@
+# .dockerignore
+# Ignore these files when building Docker image
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+
+# Artifacts (will be generated at runtime)
+artifacts/
+final_models/
+mlruns/
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# Tests
+tests/
+test_*.py
+
+# Data (don't include in image)
+data/*.csv
+
+# Environment files (sensitive!)
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db

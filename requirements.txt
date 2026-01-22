@@ -12,3 +12,5 @@ mlflow
 dagshub
 dvc-s3
 boto3
+scipy
+uvicorn

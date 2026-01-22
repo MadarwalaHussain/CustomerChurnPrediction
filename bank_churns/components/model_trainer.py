@@ -154,15 +154,15 @@ class ModelTrainer:
                     logging.warning("  Continuing without MLflow tracking")
                     mlflow_enabled = False
             else:
-                logging.info("ℹ️  MLflow not configured (MLFLOW_TRACKING_URI not set)")
+                logging.info("MLflow not configured (MLFLOW_TRACKING_URI not set)")
 
             # Start MLflow run (if enabled)
             mlflow_run_started = False
             if mlflow_enabled:
                 try:
-                    mlflow.start_run(run_name="model_comparison")
+                    mlflow.start_run(run_name="BestModel")
                     mlflow_run_started = True
-                    logging.info("✓ MLflow run started")
+                    logging.info("MLflow run started")
                 except Exception as e:
                     logging.warning(f" Failed to start MLflow run: {e}")
                     mlflow_enabled = False
@@ -170,30 +170,12 @@ class ModelTrainer:
             try:
                 # Define models with class imbalance handling
                 models = {
-                    'RandomForest': RandomForestClassifier(
-                        n_estimators=294,
-                        max_depth=11,
-                        min_samples_split=7,
-                        min_samples_leaf=9,
-                        bootstrap=True,
-                        criterion='log_loss',
-                        class_weight='balanced',
-                        random_state=42,
-                        n_jobs=-1
-                    ),
-                    'XGBoost': XGBClassifier(
-                        scale_pos_weight=len(y_train[y_train == 0]) / len(y_train[y_train == 1]),
-                        random_state=42,
-                        n_jobs=-1,
-                        eval_metric='logloss'
-                    ),
                     'GradientBoosting': GradientBoostingClassifier(
+                        n_estimators=200,        # Sara's optimized params
+                        learning_rate=0.05,      # Sara's optimized params
+                        max_depth=4,             # Sara's optimized params
+                        subsample=0.8,           # Sara's optimized params
                         random_state=42
-                    ),
-                    'LogisticRegression': LogisticRegression(
-                        class_weight='balanced',
-                        random_state=42,
-                        max_iter=1000
                     )
                 }
 
@@ -237,7 +219,7 @@ class ModelTrainer:
                             cm = confusion_matrix(y_test, y_test_pred)
                             mlflow.log_text(str(cm), f"{model_name}_confusion_matrix.txt")
 
-                            logging.info(f"✓ {model_name} metrics logged to MLflow")
+                            logging.info(f"{model_name} metrics logged to MLflow")
                         except Exception as e:
                             logging.warning(f" Failed to log {model_name} to MLflow: {e}")
 
@@ -285,7 +267,7 @@ class ModelTrainer:
                             mlflow.sklearn.log_model(
                                 best_model,
                                 'model',
-                                registered_model_name='BankChurnBestModel'
+                                registered_model_name='BankChurnBestModelGB'
                             )
                             logging.info(" Model registered in MLflow Model Registry")
                         else:
