@@ -102,15 +102,15 @@ def main():
         logging.info(f"   Test F1: {model_trainer_artifact.test_metric_artifact.f1_score:.4f}")
         logging.info(f"   Model saved to: {model_trainer_artifact.trained_model_file_path}")
 
-        # ==================== MODEL EVALUATION ====================
-        logging.info("\n" + "=" * 70)
-        logging.info("PHASE 5: MODEL EVALUATION")
-        logging.info("=" * 70)
+        # # ==================== MODEL EVALUATION ====================
+        # logging.info("\n" + "=" * 70)
+        # logging.info("PHASE 5: MODEL EVALUATION")
+        # logging.info("=" * 70)
 
-        model_evaluation_config=ModelEvaluationConfig(training_pipeline_config)
-        model_evaluation = ModelEvaluation(model_trainer_artifact=model_trainer_artifact,
-                                           model_evaluation_config=model_evaluation_config,data_transformation_artifact=data_transformation_artifact)
-        model_evaluation.initiate_model_evaluation()
+        # model_evaluation_config=ModelEvaluationConfig(training_pipeline_config)
+        # model_evaluation = ModelEvaluation(model_trainer_artifact=model_trainer_artifact,
+        #                                    model_evaluation_config=model_evaluation_config,data_transformation_artifact=data_transformation_artifact)
+        # model_evaluation.initiate_model_evaluation()
 
     except Exception as e:
         logging.error("\n" + "=" * 70)
